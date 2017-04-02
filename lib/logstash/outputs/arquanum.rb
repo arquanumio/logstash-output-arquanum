@@ -56,7 +56,7 @@ class LogStash::Outputs::Arquanum < LogStash::Outputs::Base
   public
   def receive(event)
     # Send event
-    # send_event(format_message(event))
+    send_event(format_message(event))
   end # def receive
 
   public
@@ -83,7 +83,7 @@ class LogStash::Outputs::Arquanum < LogStash::Outputs::Base
 
     @payload = {
         :tag => "#{@tag}",
-        :message => message
+        :text => message
     }
 
     @headers = {
@@ -93,7 +93,7 @@ class LogStash::Outputs::Arquanum < LogStash::Outputs::Base
         'Accept' => 'application/json'
     }
     @logger.info("Arquanum Request Payload: ", :api_url => @api_url, :body => @payload, :headers => @headers)
-    self.class.post @api_url, :body => JSON.dump(@payload), :headers => @headers
+    self.class.post @api_url, :body => LogStash::Json.dump(@payload), :headers => @headers
   end
 
 end # class LogStash::Outputs::Arquanum
